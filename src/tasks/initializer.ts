@@ -28,6 +28,7 @@ import {log} from '../console/log';
 import {TaskWithdrawAll, withdrawAllTargetType, withdrawAllTaskName} from './instances/withdrawAll';
 import profiler from '../profiler/screeps-profiler';
 import {rechargeTaskName, TaskRecharge} from './instances/recharge';
+import { scavengeTaskName, TaskScavenge, scavengeTargetType } from './instances/scavenge';
 
 export function initializeTask(protoTask: protoTask): Task {
 	// Retrieve name and target data from the protoTask
@@ -94,6 +95,9 @@ export function initializeTask(protoTask: protoTask): Task {
 			break;
 		case reserveTaskName:
 			task = new TaskReserve(target as reserveTargetType);
+			break;
+		case scavengeTaskName:
+			task = new TaskScavenge(target as scavengeTargetType);
 			break;
 		case signControllerTaskName:
 			task = new TaskSignController(target as signControllerTargetType);

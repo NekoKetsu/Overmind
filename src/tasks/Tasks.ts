@@ -24,6 +24,7 @@ import {dropTargetType, TaskDrop} from './instances/drop';
 import {profile} from '../profiler/decorator';
 import {TaskWithdrawAll, withdrawAllTargetType} from './instances/withdrawAll';
 import {TaskRecharge} from './instances/recharge';
+import {TaskScavenge, scavengeTargetType } from './instances/scavenge';
 
 @profile
 export class Tasks {
@@ -61,6 +62,10 @@ export class Tasks {
 
 	static dismantle(target: dismantleTargetType, options = {} as TaskOptions): TaskDismantle {
 		return new TaskDismantle(target, options);
+	}
+
+	static scavenge(target: scavengeTargetType, options = {} as TaskOptions): TaskScavenge {
+		return new TaskScavenge(target, options);
 	}
 
 	static drop(target: dropTargetType,

@@ -24,6 +24,7 @@ import {DirectiveHarvest} from './resource/harvest';
 import {DirectiveExtract} from './resource/extract';
 import {DirectiveSwarmDestroy} from './offense/swarmDestroy';
 import {DirectiveOutpostDefense} from './defense/outpostDefense';
+import {DirectiveScavenge} from './resource/scavenge';
 
 export function DirectiveWrapper(flag: Flag): Directive | undefined {
 
@@ -108,6 +109,8 @@ export function DirectiveWrapper(flag: Flag): Directive | undefined {
 					return new DirectiveTargetSiege(flag);
 				case COLOR_YELLOW:
 					return new DirectiveDismantle(flag);
+				case COLOR_PURPLE:
+					return new DirectiveScavenge(flag);
 			}
 			break;
 

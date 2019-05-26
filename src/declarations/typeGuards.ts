@@ -14,6 +14,18 @@ export interface StoreStructure extends Structure {
 	storeCapacity: number;
 }
 
+export interface MineralStructure extends Structure {
+	mineralAmount: number;
+	mineralCapacity: number;
+	mineralType: MineralConstant;
+}
+
+export function isMineralStructure(obj: RoomObject): obj is MineralStructure {
+	return (<MineralStructure>obj).mineralAmount != undefined 
+	&& (<MineralStructure>obj).mineralCapacity != undefined
+	&& (<MineralStructure>obj).mineralType != undefined;
+}
+
 export function isEnergyStructure(obj: RoomObject): obj is EnergyStructure {
 	return (<EnergyStructure>obj).energy != undefined && (<EnergyStructure>obj).energyCapacity != undefined;
 }

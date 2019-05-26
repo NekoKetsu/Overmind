@@ -12,6 +12,8 @@ export const Roles = {
 	transport  : 'transport',
 	worker     : 'worker',
 	upgrader   : 'upgrader',
+	scavenger  : 'scavenger',
+	scavengeTransport  : 'scavengeTransport',
 	// Combat roles
 	guardMelee : 'broodling',
 	// guardRanged: 'mutalisk',
@@ -154,6 +156,20 @@ export const Setups = {
 
 		early: new CreepSetup(Roles.worker, {
 			pattern  : [WORK, CARRY, MOVE, MOVE],
+			sizeLimit: Infinity,
+		}),
+
+	},
+
+	scavengers: {
+
+		scavenger: new CreepSetup(Roles.scavenger, {
+			pattern  : [WORK, WORK, CARRY, MOVE],
+			sizeLimit: Infinity,
+		}),
+
+		hauler: new CreepSetup(Roles.scavengeTransport, {
+			pattern  : [CARRY, MOVE],
 			sizeLimit: Infinity,
 		}),
 

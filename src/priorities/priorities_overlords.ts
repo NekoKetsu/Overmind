@@ -72,7 +72,8 @@ export var OverlordPriority = {
 	},
 
 	collection: {				// Non-urgent collection of resources, like from a deserted storage
-		haul: 1100
+		haul: 1100,
+		scavenge: 500
 	},
 
 	default: 99999				// Default overlord priority to ensure it gets run last

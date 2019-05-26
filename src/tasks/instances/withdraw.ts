@@ -2,10 +2,10 @@
 
 import {Task} from '../Task';
 import {profile} from '../../profiler/decorator';
-import {EnergyStructure, isEnergyStructure, isStoreStructure, StoreStructure} from '../../declarations/typeGuards';
+import {EnergyStructure, isEnergyStructure, isStoreStructure, StoreStructure, MineralStructure} from '../../declarations/typeGuards';
 
 export type withdrawTargetType =
-	EnergyStructure
+	EnergyStructure | MineralStructure
 	| StoreStructure
 	| StructureLab
 	| StructurePowerSpawn
