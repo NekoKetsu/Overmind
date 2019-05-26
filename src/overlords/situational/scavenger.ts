@@ -23,8 +23,8 @@ export class ScavengingOverlord extends Overlord {
 	constructor(directive: DirectiveScavenge, priority = OverlordPriority.collection.scavenge) {
 		super(directive, 'scavenge', priority);
 		this.directive = directive;
-		this.scavengers = this.zerg(Roles.scavenger);
-		this.haulers = this.zerg(Roles.scavengeTransport);
+		this.scavengers = this.zerg(Roles.worker);
+		this.haulers = this.zerg(Roles.transport);
 	}
 
 	init() {
@@ -47,15 +47,15 @@ export class ScavengingOverlord extends Overlord {
 											- _.sum(this.colony.storage.store)) * tripDistance;
 
 			// Calculate amount of hauling each hauler provides in a lifetime
-			let haulerCarryParts = Setups.scavengers.hauler.getBodyPotential(CARRY, this.colony);
+			let haulerCarryParts = Setups.transporters.early.getBodyPotential(CARRY, this.colony);
 
 			let haulingPowerPerLifetime = CREEP_LIFE_TIME * haulerCarryParts * CARRY_CAPACITY;
 			// Calculate number of haulers
-			let numHaulers = Math.min(Math.ceil(haulingPowerNeeded / haulingPowerPerLifetime), MAX_HAULERS);
+			let numHaulers = Math.min(Math.ceil(haulingPowerNeeded / haulingPowerPerLifetime)+1, MAX_HAULERS);
 			// Request the haulers
-			this.wishlist(numHaulers, Setups.scavengers.hauler);
+			this.wishlist(numHaulers, Setups.transporters.early);
 		} else if(this.directive.hasDrops){
-			this.wishlist(1, Setups.scavengers.hauler);
+			this.wishlist(1, Setups.transporters.early);
 		}
 	}
 

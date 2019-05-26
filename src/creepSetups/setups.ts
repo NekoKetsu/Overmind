@@ -163,16 +163,10 @@ export const Setups = {
 
 	scavengers: {
 
-		scavenger: new CreepSetup(Roles.scavenger, {
+		scavenger: new CreepSetup(Roles.worker, {
 			pattern  : [WORK, WORK, CARRY, MOVE],
 			sizeLimit: Infinity,
 		}),
-
-		hauler: new CreepSetup(Roles.scavengeTransport, {
-			pattern  : [CARRY, MOVE],
-			sizeLimit: Infinity,
-		}),
-
 	},
 
 	upgraders: {
