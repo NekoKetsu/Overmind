@@ -17,27 +17,29 @@
     "lint": "tslint \"src/**/*.ts\"",
     "clean": "rm -rf tsc-out && rm -rf dist",
     "obfuscate": "tsc && javascript-obfuscator tsc-out/Overmind.js --output src/Overmind_obfuscated.js --compact false --self-defending true --string-array true --string-array-threshold 1 --string-array-encoding true && javascript-obfuscator tsc-out/assimilation/Assimilator.js --output src/assimilation/Assimilator_obfuscated.js --compact false --self-defending true --string-array true --string-array-threshold 1 --string-array-encoding true",
-    "compile": "rollup -c",
+    "compile": "rollup -c && npm run copy",
     "push-main": "rollup -c --environment DEST:main",
     "push-pserver": "rollup -c --environment DEST:pserver",
     "push-screepsplus": "rollup -c --environment DEST:screepsplus",
-    "test": "npm run clean && npm run build"
+    "test": "npm run clean && npm run build && npm run lint",
+    "copy": "cpx \"dist/*.js\" \"C:/Users/Alexander Scherer/AppData/Local/Screeps/scripts/schealex_dev_de___21025/default\""
   },
   "engines": {
     "node": "10.x"
   },
   "devDependencies": {
-    "@types/node": "^10.17.18",
-    "@types/lodash": "3.10.2",
-    "@types/screeps": "^3.1.0",
     "@rollup/plugin-commonjs": "^11.0.2",
     "@rollup/plugin-node-resolve": "^7.1.1",
+    "@types/lodash": "3.10.2",
+    "@types/node": "^10.17.18",
+    "@types/screeps": "^3.1.0",
+    "cpx": "^1.5.0",
     "rollup": "2.6.0",
     "rollup-plugin-progress": "1.1.1",
     "rollup-plugin-screeps": "1.0.0",
     "rollup-plugin-typescript2": "0.27.0",
     "tslint": "^5.20.0",
-    "typedoc": "^0.14.2",
+    "typedoc": "^0.17.7",
     "typescript": "2.9.2"
   },
   "dependencies": {

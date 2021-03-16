@@ -18,6 +18,7 @@ import {DirectiveBaseOperator} from './powerCreeps/baseOperator';
 import {DirectiveExtract} from './resource/extract';
 import {DirectiveHarvest} from './resource/harvest';
 import {DirectiveHaul} from './resource/haul';
+import {DirectiveLeech} from './resource/leech';
 import {DirectivePowerMine} from './resource/powerMine';
 import {DirectiveRPBunker} from './roomPlanner/roomPlanner_bunker';
 import {DirectiveRPCommandCenter} from './roomPlanner/roomPlanner_commandCenter';
@@ -114,6 +115,8 @@ export function DirectiveWrapper(flag: Flag): Directive | undefined {
 					return new DirectiveHaul(flag);
 				case COLOR_RED:
 					return new DirectivePowerMine(flag);
+				case COLOR_ORANGE:
+					return new DirectiveLeech(flag);
 			}
 			break;
 

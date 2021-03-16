@@ -95,10 +95,10 @@ export const ERR_DONT_BUY_REACTION_INTERMEDIATES = -109;
 export const ERR_DRY_RUN_ONLY_SUPPORTS_DIRECT_TRANSACTIONS = -110;
 
 const defaultTradeOpts: TradeOpts = {
-	preferDirect              : false,
+	preferDirect              : true,
 	flexibleAmount            : true,
 	ignoreMinAmounts          : false,
-	ignorePriceChecksForDirect: false,
+	ignorePriceChecksForDirect: true,
 	dryRun                    : false,
 };
 
@@ -133,14 +133,14 @@ export class TraderJoe implements ITradeNetwork {
 				maxEnergyBuyOrders    : 5,
 				maxOrdersPlacedPerTick: 7,
 				maxOrdersForResource  : 20,
-				minSellOrderAmount    : 1000,
-				maxSellOrderAmount    : 25000,
+				minSellOrderAmount    : 999998,
+				maxSellOrderAmount    : 999999,
 				minSellDirectAmount   : 250,
-				maxSellDirectAmount   : 10000,
-				minBuyOrderAmount     : 250,
-				maxBuyOrderAmount     : 25000,
+				maxSellDirectAmount   : 999997,
+				minBuyOrderAmount     : 999998,
+				maxBuyOrderAmount     : 999999,
 				minBuyDirectAmount    : 500,
-				maxBuyDirectAmount    : 10000,
+				maxBuyDirectAmount    : 999997,
 			}
 		},
 	};
@@ -335,7 +335,8 @@ export class TraderJoe implements ITradeNetwork {
 			// Average distance between any two rooms is 25 since the map wraps, which has 56% transaction price, so
 			// energy is 44% what is is normally. This is a bit pessimistic, so let's bump it to 55%, which currently
 			// is what computeCompetitivePrice(sell, energy) is telling me it should be around...
-			const energyPriceGuess = 0.55 * this.memory.cache.history.energy.avg14;
+			const energyPriceGuess = 0.55 * (this.memory.cache.history.energy ?
+				this.memory.cache.history.energy.avg14 || 0.1 : 0.1);
 			const energyToCreditMultiplier = Math.min(energyPriceGuess, 0.1);
 			return transferCost * energyToCreditMultiplier;
 		} else {
@@ -354,12 +355,12 @@ export class TraderJoe implements ITradeNetwork {
 		const ingredients = Abathur.enumerateReactionBaseIngredients(resource);
 		if (ingredients.length > 0) { // a synthesizeable compound
 			return _.sum(ingredients, res =>
-				this.memory.cache.history[res] ? this.memory.cache.history[res].avg14 || Infinity : Infinity);
+				this.memory.cache.history[res] ? this.memory.cache.history[res].avg14 || 0.1 : 0.1);
 		} else { // not synthesizeable
 			if (this.memory.cache.history[resource]) {
 				return this.memory.cache.history[resource].avg14;
 			} else {
-				return Infinity;
+				return 0.1;
 			}
 		}
 	}
@@ -811,14 +812,12 @@ export class TraderJoe implements ITradeNetwork {
 
 		// If you don't have a lot of credits or preferDirect==true, try to sell directly to an existing buy order
 		if (opts.preferDirect || Game.market.credits < TraderJoe.settings.market.credits.mustSellDirectBelow) {
-			if (this.getExistingOrders(ORDER_SELL, resource, terminal.room.name).length == 0) {
-				const result = this.sellDirect(terminal, resource, amount, opts);
-				if (result != ERR_NO_ORDER_TO_SELL_TO && result != ERR_SELL_DIRECT_PRICE_TOO_LOW) {
-					return result; // if there's nowhere to sensibly sell, allow creating an order
-				}
-				this.notify(`Sell direct request: ${amount} ${resource} from ${printRoomName(terminal.room.name)} ` +
-							`was unsuccessful; allowing fallthrough to TradeNetwork.maintainOrder()`);
+			const result = this.sellDirect(terminal, resource, amount, opts);
+			if (result != ERR_NO_ORDER_TO_SELL_TO && result != ERR_SELL_DIRECT_PRICE_TOO_LOW) {
+				return result; // if there's nowhere to sensibly sell, allow creating an order
 			}
+			this.notify(`Sell direct request: ${amount} ${resource} from ${printRoomName(terminal.room.name)} ` +
+						`was unsuccessful; allowing fallthrough to TradeNetwork.maintainOrder()`);
 		}
 
 		if (opts.dryRun) {

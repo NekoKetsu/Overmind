@@ -31,7 +31,8 @@ export class UpgradeSite extends HiveCluster {
 
 	static settings = {
 		energyBuffer     : 100000,	// Number of upgrader parts scales with energy minus this value
-		energyPerBodyUnit: 20000,	// Scaling factor: this much excess energy adds one extra body repetition // TODO: scaling needs to increase with new storage/terminal system
+		energyPerBodyUnit: 20000,	// Scaling factor: this much excess energy adds one extra body repetition
+															// TODO: scaling needs to increase with new storage/terminal system
 		minLinkDistance  : 10,		// Required distance to build link
 		linksRequestBelow: 200,		// Links request energy when less than this amount
 	};
@@ -55,7 +56,14 @@ export class UpgradeSite extends HiveCluster {
 			if (inputSite) {
 				return inputSite.pos;
 			}
-			return this.calculateBatteryPos() || log.alert(`Upgrade site at ${this.pos.print}: no batteryPos!`);
+			const plannedPos = this.calculateBatteryPos();
+			if (plannedPos) {
+				return plannedPos;
+			}
+			if (!this.colony.roomPlanner.active) {
+				log.alert(`Upgrade site at ${this.pos.print}: no batteryPos!`);
+			}
+			return undefined;
 		});
 		if (this.batteryPos) this.colony.destinations.push({pos: this.batteryPos, order: 0});
 		// Register link
@@ -144,7 +152,7 @@ export class UpgradeSite extends HiveCluster {
 		} else if (this.colony.roomPlanner.storagePos) {
 			originPos = this.colony.roomPlanner.storagePos;
 		} else {
-			return;
+			return undefined;
 		}
 		// Find all positions at range 2 from controller
 		let inputLocations: RoomPosition[] = [];

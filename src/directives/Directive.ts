@@ -108,7 +108,7 @@ export abstract class Directive {
 	}
 
 	get print(): string {
-		return '<a href="#!/room/' + Game.shard.name + '/' + this.pos.roomName + '">[' + this.name + ']</a>';
+		return '<a href="#!/room/' + Game.shard.name + '/' + (this.pos ? this.pos.roomName : '' ) + '">[' + this.name + ']</a>';
 	}
 
 	debug(...args: any[]) {
